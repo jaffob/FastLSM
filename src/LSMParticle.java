@@ -9,18 +9,19 @@ public class LSMParticle extends LSMObject {
 	public Vector2d v;		// Velocity vector.
 	public Vector2d f;		// Force accumulator.
 	
+	public double mass;
+	
 	public LSMParticle(Point2d pos)
 	{
 		this.pos = pos;
 		v = new Vector2d();
 		f = new Vector2d();
+		mass = 1.;
 	}
 	
 	public LSMParticle(double x, double y)
 	{
-		this.pos = new Point2d(x,y);
-		v = new Vector2d();
-		f = new Vector2d();
+		this(new Point2d(x, y));
 	}
 	
 	@Override
@@ -41,7 +42,8 @@ public class LSMParticle extends LSMObject {
 
 	@Override
 	public void timestep(double dt) {
-		v.scaleAdd(dt, f, v);
-		pos.scaleAdd(dt, v, pos);
+		v.scaleAdd(dt / mass, f, v);		// v += f/mass * dt
+		pos.scaleAdd(dt, v, pos);			// pos += v * dt
+		f.set(0., 0.);						// clear forces
 	}
 }

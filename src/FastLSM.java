@@ -2,9 +2,8 @@ import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-
 import javax.swing.*;
+import javax.vecmath.Point2d;
 
 public class FastLSM extends JComponent implements KeyListener {
 
@@ -16,46 +15,29 @@ public class FastLSM extends JComponent implements KeyListener {
 	
 	// Frame rate (frames per second).
 	private final int FPS = 30;
-	
-	private long lastStep;
-	
-	// LSMObjects representing physical objects.
-	public final ArrayList<LSMObject> objs;
-	
-	// Physics system.
-	private final LSMPhysicsSystem phys;
+
+	// The grid containing all the grid particles.
+	public final LSMGrid grid;
 	
 	public FastLSM() {
-		objs = new ArrayList<>();
-		phys = new LSMPhysicsSystem(objs);
+		grid = new LSMGrid(new Point2d(300., 200.), 3, 3, 300, 300, 2);
 	}
 	
 	public void run() {
-		
-		lastStep = System.nanoTime();
-		
+				
 		while (true) {
+			
+			long startTime = System.nanoTime();
 			
 			processInput();
 			
-			long currTime = System.nanoTime();
-			double dt = (double)(currTime - lastStep) / 1000000000.;
-			
-			// Timestep the physics system.
-			phys.timestep(dt);
-			
-			// Timestep all the LSMObjects.
-			for (LSMObject obj : objs)
-			{
-				obj.timestep(dt);
-			}
-			
-			lastStep = currTime;
+			// Timestep the grid.
+			grid.timestep(1. / FPS);
 			
 			// Redraw the screen and sleep.
 			repaint();
 			try {
-				Thread.sleep(1000 / FPS);
+				Thread.sleep(Math.max(0, 1000/FPS - (System.nanoTime() - startTime) / 1000000));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -69,11 +51,7 @@ public class FastLSM extends JComponent implements KeyListener {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-		for (LSMObject obj : objs)
-		{
-			obj.draw(g);
-		}
+		grid.draw(g);
 	}
 
 	public static void main(String[] args) {
@@ -86,9 +64,7 @@ public class FastLSM extends JComponent implements KeyListener {
 		window.setResizable(false);
 		window.setVisible(true);
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
-		lsm.objs.add(new LSMParticle(100., 200.));
-		lsm.objs.add(new LSMParticle(200., 200.));
+
 		lsm.run();
 	}
 
