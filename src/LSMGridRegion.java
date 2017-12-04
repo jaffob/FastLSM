@@ -45,10 +45,16 @@ public class LSMGridRegion extends LSMObject {
 	}
 
 	public void shapeMatch(double dt) {
+		Point2d ccm = new Point2d();
+		Point2d gcm = new Point2d();
+		double rMass = 0;
 		for (LSMGridParticle p : particles)
 		{
-			p.f.add(new Vector2d(0, 10.));
+			ccm.scaleAdd(p.mass, p.pos, ccm);
+			gcm.scaleAdd(p.mass, p.goalpos, gcm);
 		}
+		ccm.scale(1/rMass);
+		gcm.scale(1/rMass);
 	}
 
 }
