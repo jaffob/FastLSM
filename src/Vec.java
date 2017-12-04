@@ -75,8 +75,8 @@ public class Vec {
 		GMatrix m2 = new GMatrix(2,1);
 		m2.setElement(0, 0, b.x);
 		m2.setElement(1, 0, b.y);
-		m1.mul(m2);
-		Vector2d v = new Vector2d(m1.getElement(0, 0),m1.getElement(1, 0));
+		m2.mul(m1,m2);
+		Vector2d v = new Vector2d(m2.getElement(0, 0),m2.getElement(1, 0));
 		return v;
 	}
 }
