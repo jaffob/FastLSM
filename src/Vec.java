@@ -60,4 +60,23 @@ public class Vec {
 		out.scaleAdd(alpha, b);
 		return out;
 	}
+	
+	public static GMatrix vecMatMul(Tuple2d a,Tuple2d b) {
+		GMatrix mat = new GMatrix(2,2);
+		mat.setElement(0, 0, a.x*b.x);
+		mat.setElement(1, 0, a.y*b.x);
+		mat.setElement(0, 1, a.x*b.y);
+		mat.setElement(1, 1, a.y*b.y);
+		return mat;
+	}
+	
+	public static Vector2d matVecMul(GMatrix a,Tuple2d b) {
+		GMatrix m1 = new GMatrix(a);
+		GMatrix m2 = new GMatrix(2,1);
+		m2.setElement(0, 0, b.x);
+		m2.setElement(1, 0, b.y);
+		m1.mul(m2);
+		Vector2d v = new Vector2d(m1.getElement(0, 0),m1.getElement(1, 0));
+		return v;
+	}
 }
