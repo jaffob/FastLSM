@@ -22,8 +22,12 @@ public class FastLSM extends JComponent implements KeyListener {
 	// LSMObjects representing physical objects.
 	public final ArrayList<LSMObject> objs;
 	
+	// Physics system.
+	private final LSMPhysicsSystem phys;
+	
 	public FastLSM() {
 		objs = new ArrayList<>();
+		phys = new LSMPhysicsSystem(objs);
 	}
 	
 	public void run() {
@@ -35,11 +39,15 @@ public class FastLSM extends JComponent implements KeyListener {
 			processInput();
 			
 			long currTime = System.nanoTime();
+			double dt = (double)(currTime - lastStep) / 1000000000.;
+			
+			// Timestep the physics system.
+			phys.timestep(dt);
 			
 			// Timestep all the LSMObjects.
 			for (LSMObject obj : objs)
 			{
-				obj.timestep((double)(currTime - lastStep) / 1000000000.);
+				obj.timestep(dt);
 			}
 			
 			lastStep = currTime;

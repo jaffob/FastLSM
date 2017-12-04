@@ -5,19 +5,22 @@ import javax.vecmath.*;
 
 public class LSMParticle extends LSMObject {
 
-	public Point2d pos;
-	public Vector2d v;
+	public Point2d pos;		// Position tuple.
+	public Vector2d v;		// Velocity vector.
+	public Vector2d f;		// Force accumulator.
 	
 	public LSMParticle(Point2d pos)
 	{
 		this.pos = pos;
 		v = new Vector2d();
+		f = new Vector2d();
 	}
 	
 	public LSMParticle(double x, double y)
 	{
 		this.pos = new Point2d(x,y);
 		v = new Vector2d();
+		f = new Vector2d();
 	}
 	
 	@Override
@@ -38,6 +41,7 @@ public class LSMParticle extends LSMObject {
 
 	@Override
 	public void timestep(double dt) {
+		v.scaleAdd(dt, f, v);
 		pos.scaleAdd(dt, v, pos);
 	}
 }
