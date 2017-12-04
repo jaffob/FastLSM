@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics;
+
 import javax.vecmath.*;
 
 public class LSMGridParticle extends LSMParticle {
@@ -24,12 +27,19 @@ public class LSMGridParticle extends LSMParticle {
 		this.r = new LSMGridRegion(grid, this);
 	}
 
+	public void initParticle() {
+		r.initRegion();
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		super.draw(g);
+		g.setColor(Color.RED);
+		g.fillRect((int)goalpos.x - 1, (int)goalpos.y - 1, 3, 3);
+	}
+	
 	@Override
 	public String toString() {
 		return "(" + gx + "," + gy + ")/(" + pos.x + "," + pos.y + ")";
-	}
-
-	public void initParticle() {
-		r.initRegion();
 	}
 }

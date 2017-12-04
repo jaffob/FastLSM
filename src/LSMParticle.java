@@ -37,7 +37,7 @@ public class LSMParticle extends LSMObject {
 	
 	public int getParticleRadius()
 	{
-		return 2;
+		return 4;
 	}
 
 	@Override

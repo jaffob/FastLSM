@@ -103,4 +103,27 @@ public class LSMGrid extends LSMObject {
 		return height / (ny - 1);
 	}
 
+	public LSMGridParticle getNearestParticle(Point2d pos)
+	{
+		// We can't assume the nearest particle is based on grid indices, cause particles can move.
+		
+		double bestDistSq = 100000000.;
+		LSMGridParticle bestParticle = null;
+		
+		for (int i = 0; i < particles.length; i++)
+		{
+			for (int j = 0; j < particles[0].length; j++)
+			{
+				double distSq = particles[i][j].pos.distanceSquared(pos);
+				if (distSq < bestDistSq)
+				{
+					bestDistSq = distSq;
+					bestParticle = particles[i][j];
+				}
+			}
+		}
+		
+		return bestParticle;
+	}
+
 }
