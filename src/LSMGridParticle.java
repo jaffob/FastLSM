@@ -16,6 +16,9 @@ public class LSMGridParticle extends LSMParticle {
 	
 	public boolean isPinned;
 	
+	// Drawing parameters.
+	public static boolean DRAW_GOALPOS = true;
+	
 	public LSMGridParticle(LSMGrid grid, int gx, int gy)
 	{
 		super(gx * grid.getCellWidth() + grid.pos.x, gy * grid.getCellHeight() + grid.pos.y);
@@ -34,8 +37,12 @@ public class LSMGridParticle extends LSMParticle {
 	@Override
 	public void draw(Graphics g) {
 		super.draw(g);
-		g.setColor(Color.RED);
-		g.fillRect((int)goalpos.x - 1, (int)goalpos.y - 1, 3, 3);
+		
+		if (DRAW_GOALPOS)
+		{
+			g.setColor(Color.RED);
+			g.fillRect((int)goalpos.x - 1, (int)goalpos.y - 1, 3, 3);
+		}
 	}
 	
 	@Override

@@ -13,10 +13,12 @@ public class LSMGridRegion extends LSMObject {
 	public final Point2d rcm;
 	public double rMass;
 	
-	// Constants.
-	public static final boolean ENABLE_SM_ROTATION = false;
+	// Constants (or not-so-constants).
+	public static boolean ENABLE_SM_ROTATION = false;
+	public static boolean DRAW_RCM = false;
+	public static boolean DRAW_CCM = true;
 	
-	public Point2d gcmdraw;
+	public Point2d ccmdraw;
 	
 	public LSMGridRegion(LSMGrid grid, LSMGridParticle owner)
 	{
@@ -27,7 +29,7 @@ public class LSMGridRegion extends LSMObject {
 		this.rcm = new Point2d();
 		this.rMass = 0;
 		
-		this.gcmdraw = new Point2d();
+		this.ccmdraw = new Point2d();
 	}
 	
 	public void initRegion() {
@@ -57,9 +59,18 @@ public class LSMGridRegion extends LSMObject {
 	}
 
 	@Override
-	public void draw(Graphics g) {
-		g.setColor(Color.BLUE);
-		g.fillRect((int)rcm.x - 2, (int)rcm.y - 2, 4, 4);
+	public void draw(Graphics g)
+	{
+		if (DRAW_RCM)
+		{
+			g.setColor(Color.BLUE);
+			g.fillRect((int)rcm.x - 2, (int)rcm.y - 2, 4, 4);
+		}
+		if (DRAW_CCM)
+		{
+			g.setColor(Color.BLUE);
+			g.fillRect((int)ccmdraw.x - 2, (int)ccmdraw.y - 2, 4, 4);
+		}
 	}
 
 	@Override
@@ -130,7 +141,7 @@ public class LSMGridRegion extends LSMObject {
 			p.v.scaleAdd(LSMGrid.STIFFNESS_ALPHA / (dt * particles.size()), Vec.diff(p.goalpos, p.pos), p.v);
 		}
 		
-		gcmdraw.set(ccm);
+		ccmdraw.set(ccm);
 	}
 
 }

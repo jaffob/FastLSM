@@ -19,6 +19,9 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	
+	// Other random constants.
+	private static final int MOUSE_Y_OFFSET = -30;
+	
 	// Frame rate (frames per second).
 	private final int FPS = 30;
 
@@ -30,7 +33,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	private LSMGridParticle mouseSelectedParticle;
 	
 	public FastLSM() {
-		grid = new LSMGrid(new Point2d(300., 200.), 3, 3, 300, 300, 2);
+		grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);
 		mousePos = new Point2d();
 		mouseSelectedParticle = null;
 	}
@@ -121,9 +124,9 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		mouseSelectedParticle = grid.getNearestParticle(new Point2d(e.getX(), e.getY()));
+		mouseSelectedParticle = grid.getNearestParticle(new Point2d(e.getX(), e.getY() + MOUSE_Y_OFFSET));
 		mousePos.x = e.getX();
-		mousePos.y = e.getY();
+		mousePos.y = e.getY() + MOUSE_Y_OFFSET;
 	}
 
 	@Override
@@ -136,7 +139,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		if (mouseSelectedParticle != null)
 		{
 			mousePos.x = e.getX();
-			mousePos.y = e.getY();
+			mousePos.y = e.getY() + MOUSE_Y_OFFSET;
 		}
 	}
 
