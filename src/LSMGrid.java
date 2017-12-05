@@ -18,6 +18,9 @@ public class LSMGrid extends LSMObject {
 	// Half width of the regions.
 	public final int w;
 	
+	// Constants.
+	public static final double STIFFNESS_ALPHA = 1.;
+	
 	public LSMGrid(Point2d pos, int nx, int ny, double width, double height, int w)
 	{
 		this.pos = pos;

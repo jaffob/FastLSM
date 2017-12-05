@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -67,6 +68,8 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
 		grid.draw(g);
 	}
 

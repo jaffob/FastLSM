@@ -98,7 +98,7 @@ public class LSMGridRegion extends LSMObject {
 		for(int i=0; i<2; i++) {
 			for(int j=0; j<2; j++) {
 				double e = S.getElement(i, j);
-				e = Math.sqrt(e);
+				e = Math.sqrt(Math.abs(e));
 				S.setElement(i, j, e);
 			}
 		}
@@ -115,11 +115,17 @@ public class LSMGridRegion extends LSMObject {
 		
 		for(int i=0; i<particles.size(); i++) {
 			LSMGridParticle p = particles.get(i);
-			Vector2d goal = Vec.matVecMul(R, rigidParticles.get(i));
-			goal.add(ccm);
 			
-			//Vector2d goal = Vec.sum(rigidParticles.get(i), gcm);
+//			Vector2d goal = Vec.matVecMul(R, rigidParticles.get(i));
+//			goal.add(ccm);
+			
+			Vector2d goal = new Vector2d(rigidParticles.get(i));
+			goal.add(ccm);
+
 			p.goalpos.set(goal);
+			
+			// Update velocity based on goal position.
+			p.v.scaleAdd(LSMGrid.STIFFNESS_ALPHA / (dt * particles.size()), Vec.diff(p.goalpos, p.pos), p.v);
 		}
 		
 		gcmdraw.set(ccm);
