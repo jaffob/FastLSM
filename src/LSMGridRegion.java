@@ -138,7 +138,7 @@ public class LSMGridRegion extends LSMObject {
 			p.goalpos.set(goal);
 			
 			// Update velocity based on goal position.
-			p.v.scaleAdd(LSMGrid.STIFFNESS_ALPHA / (dt * particles.size()), Vec.diff(p.goalpos, p.pos), p.v);
+			p.v_accum.scaleAdd(LSMGrid.STIFFNESS_ALPHA / (dt * particles.size()), Vec.diff(p.goalpos, p.pos), p.v_accum);
 		}
 		
 		ccmdraw.set(ccm);

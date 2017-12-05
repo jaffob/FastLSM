@@ -74,7 +74,6 @@ public class LSMGrid extends LSMObject {
 			for (int j = 0; j < particles[0].length; j++)
 			{
 				particles[i][j].timestep(dt);
-				particles[i][j].v.set(0, 0);
 			}
 		}
 	}

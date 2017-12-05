@@ -11,9 +11,11 @@ public class LSMGridParticle extends LSMParticle {
 	// Grid x and y indices.
 	public final int gx, gy;
 	
-	// Goal positions.
+	// Goal position.
 	public Point2d goalpos;
 	
+	// Physics stuff.
+	public Vector2d v_accum;
 	public boolean isPinned;
 	
 	// Drawing parameters.
@@ -26,12 +28,21 @@ public class LSMGridParticle extends LSMParticle {
 		this.grid = grid;
 		this.gx = gx;
 		this.gy = gy;
+		this.v_accum = new Vector2d();
 		this.isPinned = false;
 		this.r = new LSMGridRegion(grid, this);
 	}
 
 	public void initParticle() {
 		r.initRegion();
+	}
+	
+	@Override
+	public void timestep(double dt) {
+		super.timestep(dt);
+		
+		pos.scaleAdd(dt, v_accum, pos);
+		v_accum.set(0., 0.);
 	}
 	
 	@Override
