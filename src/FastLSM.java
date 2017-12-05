@@ -12,6 +12,7 @@ import javax.vecmath.Point2d;
 public class FastLSM extends JComponent implements KeyListener, MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = 1L;
+	public static boolean debugFlag = false;
 	
 	// Size of screen.
 	private static final int WIDTH = 1280;
@@ -59,7 +60,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	{
 		if (mouseSelectedParticle != null)
 		{
-			mouseSelectedParticle.goalpos.set(mousePos);
+			mouseSelectedParticle.pos.set(mousePos);
 		}
 	}
 
@@ -118,6 +119,8 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	@Override
 	public void mousePressed(MouseEvent e) {
 		mouseSelectedParticle = grid.getNearestParticle(new Point2d(e.getX(), e.getY()));
+		mousePos.x = e.getX();
+		mousePos.y = e.getY();
 	}
 
 	@Override
@@ -131,7 +134,6 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		{
 			mousePos.x = e.getX();
 			mousePos.y = e.getY();
-			System.out.println(e.getY());
 		}
 	}
 

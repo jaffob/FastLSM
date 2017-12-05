@@ -78,12 +78,13 @@ public class LSMGrid extends LSMObject {
 	@Override
 	public void draw(Graphics g) {
 		
-		// Draw cell outlines.
+		// Draw particles.
 		for (int i = 0; i < particles.length; i++)
 		{
 			for (int j = 0; j < particles[0].length; j++)
 			{
 				particles[i][j].draw(g);
+				particles[i][j].r.draw(g);
 			}
 		}
 	}

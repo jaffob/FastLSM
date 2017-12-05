@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -9,8 +10,10 @@ public class LSMGridRegion extends LSMObject {
 	public final LSMGridParticle owner;
 	public final ArrayList<LSMGridParticle> particles;
 	public final ArrayList<Vector2d> rigidParticles;
-	public final Point2d ccm;
+	public final Point2d rcm;
 	public double rMass;
+	
+	public Point2d gcmdraw;
 	
 	public LSMGridRegion(LSMGrid grid, LSMGridParticle owner)
 	{
@@ -18,8 +21,10 @@ public class LSMGridRegion extends LSMObject {
 		this.owner = owner;
 		this.particles = new ArrayList<>();
 		this.rigidParticles = new ArrayList<>();
-		this.ccm = new Point2d();
+		this.rcm = new Point2d();
 		this.rMass = 0;
+		
+		this.gcmdraw = new Point2d();
 	}
 	
 	public void initRegion() {
@@ -35,22 +40,23 @@ public class LSMGridRegion extends LSMObject {
 					{
 						LSMGridParticle p = grid.particles[i][j];
 						particles.add(p);
-						ccm.scaleAdd(p.mass, p.pos, ccm);
+						rcm.scaleAdd(p.mass, p.pos, rcm);
 						rMass += p.mass;
 					}
 				}
 			}
 		}
-		ccm.scale(1/rMass);
+		rcm.scale(1/rMass);
 		for (LSMGridParticle p : particles)
 		{
-			rigidParticles.add(Vec.diff(p.pos, ccm));
+			rigidParticles.add(Vec.diff(p.pos, rcm));
 		}
 	}
 
 	@Override
 	public void draw(Graphics g) {
-		
+		g.setColor(Color.BLUE);
+		g.fillRect((int)rcm.x - 2, (int)rcm.y - 2, 4, 4);
 	}
 
 	@Override
@@ -59,13 +65,19 @@ public class LSMGridRegion extends LSMObject {
 	}
 
 	public void shapeMatch(double dt) {
+		
 		Point2d ccm = new Point2d();
-		Point2d gcm = new Point2d();
+		
 		for (LSMGridParticle p : particles)
 		{
-			gcm.scaleAdd(p.mass, p.goalpos, gcm);
+			ccm.scaleAdd(p.mass, p.pos, ccm);
 		}
-		gcm.scale(1/rMass);
+		ccm.scale(1/rMass);
+		
+		if (FastLSM.debugFlag)
+		{
+			System.out.println("debugflag");
+		}
 		
 		// calculate A_pq matrix
 		GMatrix A = new GMatrix(2,2);
@@ -79,8 +91,10 @@ public class LSMGridRegion extends LSMObject {
 			A.add(qr);
 		}
 		
-		GMatrix S = new GMatrix(2,2);
-		S.mulTransposeLeft(A, A);
+		GMatrix S = new GMatrix(A);
+		S.transpose();
+		S.mul(A);
+		
 		for(int i=0; i<2; i++) {
 			for(int j=0; j<2; j++) {
 				double e = S.getElement(i, j);
@@ -90,17 +104,25 @@ public class LSMGridRegion extends LSMObject {
 		}
 		
 		GMatrix R = new GMatrix(2,2);
+		
+		try{
 		S.invert();
+		} catch (Exception e){
+			System.out.println(e);
+			FastLSM.debugFlag = true;
+		}
 		R.mul(A, S);
 		
 		for(int i=0; i<particles.size(); i++) {
 			LSMGridParticle p = particles.get(i);
 			Vector2d goal = Vec.matVecMul(R, rigidParticles.get(i));
-			goal.add(gcm);
+			goal.add(ccm);
+			
+			//Vector2d goal = Vec.sum(rigidParticles.get(i), gcm);
 			p.goalpos.set(goal);
 		}
 		
-		
+		gcmdraw.set(ccm);
 	}
 
 }
