@@ -19,7 +19,7 @@ public class LSMGrid extends LSMObject {
 	public final int w;
 	
 	// Constants.
-	public static final double STIFFNESS_ALPHA = 1.;
+	public static final double STIFFNESS_ALPHA = 0.5;
 	
 	public LSMGrid(Point2d pos, int nx, int ny, double width, double height, int w)
 	{
@@ -74,6 +74,7 @@ public class LSMGrid extends LSMObject {
 			for (int j = 0; j < particles[0].length; j++)
 			{
 				particles[i][j].timestep(dt);
+				particles[i][j].v.set(0, 0);
 			}
 		}
 	}

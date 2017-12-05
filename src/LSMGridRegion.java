@@ -13,6 +13,9 @@ public class LSMGridRegion extends LSMObject {
 	public final Point2d rcm;
 	public double rMass;
 	
+	// Constants.
+	public static final boolean ENABLE_SM_ROTATION = false;
+	
 	public Point2d gcmdraw;
 	
 	public LSMGridRegion(LSMGrid grid, LSMGridParticle owner)
@@ -116,12 +119,11 @@ public class LSMGridRegion extends LSMObject {
 		for(int i=0; i<particles.size(); i++) {
 			LSMGridParticle p = particles.get(i);
 			
-//			Vector2d goal = Vec.matVecMul(R, rigidParticles.get(i));
-//			goal.add(ccm);
-			
-			Vector2d goal = new Vector2d(rigidParticles.get(i));
+			Vector2d goal = ENABLE_SM_ROTATION ?
+					Vec.matVecMul(R, rigidParticles.get(i))
+					: new Vector2d(rigidParticles.get(i));
 			goal.add(ccm);
-
+			
 			p.goalpos.set(goal);
 			
 			// Update velocity based on goal position.
