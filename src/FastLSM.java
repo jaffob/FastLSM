@@ -23,24 +23,30 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	private static final int MOUSE_Y_OFFSET = -30;
 	
 	// Frame rate (frames per second).
-	private final int FPS = 1000;
+	private final int FPS = 50;
 
-	// The grid containing all the grid particles.
-	public final LSMGrid grid;
+	// The grid and mesh particles.
+	public LSMMesh mesh;
+	public LSMGrid grid;
 	
 	// User input.
 	private Point2d mousePos;
 	private LSMGridParticle mouseSelectedParticle;
 	
 	public FastLSM() {
-		grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);
-		//grid = null;
+		//grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);
+		mesh = new LSMMesh();
+		grid = null;
 		mousePos = new Point2d();
 		mouseSelectedParticle = null;
 	}
 	
 	public void run()
 	{
+		// Create a placeholder mesh.
+		// TODO implement drawing a mesh.
+		
+		
 		// Main loop, running at the desired FPS.
 		while (true)
 		{

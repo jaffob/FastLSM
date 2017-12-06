@@ -51,9 +51,9 @@ public class LSMGrid extends LSMObject {
 		}
 	}
 	
-	public LSMGrid(Point2d pos, double cellwidth, double cellheight, double width, double height, int w)
+	public LSMGrid(Point2d pos, Point2d cellsize, double width, double height, int w)
 	{
-		this(pos, (int)Math.ceil(width / cellwidth), (int)Math.ceil(height / cellheight), width, height, w);
+		this(pos, (int)Math.ceil(width / cellsize.x), (int)Math.ceil(height / cellsize.y), width, height, w);
 	}
 	
 	@Override
