@@ -17,6 +17,7 @@ public class LSMGridParticle extends LSMParticle {
 	// Physics stuff.
 	public Vector2d v_accum;
 	public boolean isPinned;
+	public boolean isDragging;
 	
 	// Drawing parameters.
 	public static boolean DRAW_GOALPOS = true;
@@ -30,6 +31,8 @@ public class LSMGridParticle extends LSMParticle {
 		this.gy = gy;
 		this.v_accum = new Vector2d();
 		this.isPinned = false;
+		this.isDragging = false;
+	
 		this.r = new LSMGridRegion(grid, this);
 	}
 

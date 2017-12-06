@@ -135,7 +135,8 @@ public class LSMGridRegion extends LSMObject {
 					: new Vector2d(rigidParticles.get(i));
 			goal.add(ccm);
 			
-			p.goalpos.set(goal);
+			if (!p.isDragging)
+				p.goalpos.set(goal);
 			
 			// Update velocity based on goal position.
 			p.v_accum.scaleAdd(LSMGrid.STIFFNESS_ALPHA / (dt * particles.size()), Vec.diff(p.goalpos, p.pos), p.v_accum);
