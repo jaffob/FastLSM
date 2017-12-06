@@ -43,7 +43,6 @@ public class LSMGridParticle extends LSMParticle {
 	@Override
 	public void timestep(double dt) {
 		super.timestep(dt);
-		
 		pos.scaleAdd(dt, v_accum, pos);
 		v_accum.set(0., 0.);
 	}

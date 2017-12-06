@@ -33,7 +33,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	private LSMGridParticle mouseSelectedParticle;
 	
 	public FastLSM() {
-		grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 1);
+		grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);
 		//grid = null;
 		mousePos = new Point2d();
 		mouseSelectedParticle = null;

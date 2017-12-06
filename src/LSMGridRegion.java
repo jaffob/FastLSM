@@ -16,7 +16,7 @@ public class LSMGridRegion extends LSMObject {
 	// Constants (or not-so-constants).
 	public static boolean ENABLE_SM_ROTATION = true;
 	public static boolean DRAW_RCM = false;
-	public static boolean DRAW_CCM = true;
+	public static boolean DRAW_CCM = false;
 	
 	public Point2d ccmdraw;
 	
@@ -105,33 +105,42 @@ public class LSMGridRegion extends LSMObject {
 			A.add(qr);
 		}
 		
+		GMatrix R = new GMatrix(2,2);
 		GMatrix S = new GMatrix(A);
+		
 		S.transpose();
 		S.mul(A);
 		
-		//calculate sqrt of S
-		double B = (S.getElement(1, 1) - S.getElement(0, 0))/(2*S.getElement(0, 1));
-		double t = Math.signum(B)/(Math.abs(B) + Math.sqrt(B*B + 1));
-		double c = 1/(Math.sqrt(t*t + 1));
-		double s = c*t;
+		if (S.getElement(0, 1) != 0.)
+		{
+			//calculate sqrt of S
+			double B = (S.getElement(1, 1) - S.getElement(0, 0))/(2*S.getElement(0, 1));
+			double t = Math.signum(B)/(Math.abs(B) + Math.sqrt(B*B + 1));
+			//double c = 1/(Math.sqrt(t*t + 1));
+			//double s = c*t;
 		
-		GMatrix R = new GMatrix(2,2);
-		R.setElement(0, 0, c);
-		R.setElement(0, 1, s);
-		R.setElement(1, 0, -s);
-		R.setElement(1, 1, c);
-		
-		System.out.println("s = " + s + ", angle = " + Math.asin(s));
-		System.out.println("c = " + c + ", angle = " + Math.acos(c));
-		
-		try{
-			S.invert();
-		} catch (Exception e){
-			System.out.println(e);
-			FastLSM.debugFlag = true;
+			double temp1 = S.getElement(0, 0) - t*S.getElement(0, 1);
+			double temp2 = S.getElement(1, 1) - t*S.getElement(0, 1);
+			S.setElement(0, 0, Math.sqrt(temp1));
+			S.setElement(0, 1, 0);
+			S.setElement(1, 0, 0);
+			S.setElement(1, 1, Math.sqrt(temp2));
+			
+			//System.out.println("s = " + s + ", angle = " + Math.asin(s));
+			//System.out.println("c = " + c + ", angle = " + Math.acos(c));
+			//System.out.println("c^2 + s^2 = " + (c*c + s*s));
+			
+			try{
+				S.invert();
+			} catch (Exception e){
+				System.out.println(e);
+				FastLSM.debugFlag = true;
+			}
+			
+			R.mul(A, S);
 		}
-		R.mul(A, S);
-		
+		System.out.println(R.getElement(0, 0)*R.getElement(0, 0) + R.getElement(0, 1)*R.getElement(0, 1));
+				
 		for(int i=0; i<particles.size(); i++) {
 			LSMGridParticle p = particles.get(i);
 			
