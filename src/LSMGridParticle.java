@@ -48,6 +48,16 @@ public class LSMGridParticle extends LSMParticle {
 	}
 	
 	@Override
+	public Color getParticleColor() {
+		return Color.GRAY;
+	}
+	
+	@Override
+	public int getParticleRadius() {
+		return 3;
+	}
+	
+	@Override
 	public void draw(Graphics g) {
 		super.draw(g);
 		
