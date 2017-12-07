@@ -59,7 +59,24 @@ public class LSMMesh extends LSMObject {
 			if (mp.pos.y > botright.y) botright.y = mp.pos.y;
 		}
 		
+		// Create a grid.
 		LSMGrid grid = new LSMGrid(topleft, 15, 15, botright.x - topleft.x, botright.y - topleft.y, w);
+		
+		// Associate each point in the mesh with a grid cell.
+		for (LSMMeshParticle mp : mparticles)
+		{
+			int col = (int)Math.floor((mp.pos.x - grid.pos.x) * (grid.nx - 1)/ grid.width);
+			int row = (int)Math.floor((mp.pos.y - grid.pos.y) * (grid.ny - 1)/ grid.height);
+			
+			col = Math.min(col, grid.nx - 2);
+			row = Math.min(row, grid.ny - 2);
+			
+			mp.connectToGridParticles(grid.particles[col][row],
+						grid.particles[col+1][row],
+						grid.particles[col][row+1],
+						grid.particles[col+1][row+1]);
+		}
+		
 		return grid;
 	}
 

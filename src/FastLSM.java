@@ -24,7 +24,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	private static final int MOUSE_Y_OFFSET = -30;
 	
 	// Frame rate (frames per second).
-	private final int FPS = 50;
+	private final int FPS = 100;
 
 	// The grid and mesh particles.
 	public LSMMesh mesh;
@@ -33,6 +33,10 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	// User input.
 	private Point2d mousePos;
 	private LSMGridParticle mouseSelectedParticle;
+
+	// Options.
+	public static boolean DRAW_MESH = true;
+	public static boolean DRAW_GRID = false;
 	
 	public FastLSM() {
 		//grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);
@@ -50,7 +54,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		for (int i = 0; i < 50; i++) {
 			mesh.addParticle(new Point2d(rand.nextInt(400) + 200,rand.nextInt(400) + 200));
 		}
-		grid = mesh.createGrid(4);
+		grid = mesh.createGrid(3);
 		
 		// Main loop, running at the desired FPS.
 		while (true)
@@ -59,9 +63,9 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 			
 			processInput();
 			
-			// Timestep the grid.
+			// Timestep the grid and the mesh.
 			grid.timestep(1. / FPS);
-			
+			mesh.timestep(1. / FPS);
 			// Redraw the screen and sleep.
 			repaint();
 			try {
@@ -86,9 +90,9 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
-		if (grid != null)
+		if (grid != null && DRAW_GRID)
 			grid.draw(g);
-		if (mesh != null)
+		if (mesh != null && DRAW_MESH)
 			mesh.draw(g);
 	}
 
