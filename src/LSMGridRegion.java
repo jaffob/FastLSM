@@ -140,7 +140,14 @@ public class LSMGridRegion extends LSMObject {
 			R.mul(A, S);
 		}
 		//System.out.println(R.getElement(0, 0)*R.getElement(0, 0) + R.getElement(0, 1)*R.getElement(0, 1));
-				
+		
+		GMatrix U = new GMatrix(2,2);
+		GMatrix W = new GMatrix(2,2);
+		GMatrix V = new GMatrix(2,2);
+		A.SVD(U, W, V);
+		V.transpose();
+		R.mul(U, V);
+		
 		for(int i=0; i<particles.size(); i++) {
 			LSMGridParticle p = particles.get(i);
 			

@@ -54,7 +54,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		for (int i = 0; i < 50; i++) {
 			mesh.addParticle(new Point2d(rand.nextInt(400) + 200,rand.nextInt(400) + 200));
 		}
-		grid = mesh.createGrid(3);
+		grid = mesh.createGrid(6);
 		
 		// Main loop, running at the desired FPS.
 		while (true)
