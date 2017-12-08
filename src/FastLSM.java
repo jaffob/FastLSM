@@ -36,7 +36,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 
 	// Options.
 	public static boolean DRAW_MESH = true;
-	public static boolean DRAW_GRID = false;
+	public static boolean DRAW_GRID = true;
 	
 	public FastLSM() {
 		//grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);

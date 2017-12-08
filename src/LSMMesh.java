@@ -60,7 +60,7 @@ public class LSMMesh extends LSMObject {
 		}
 		
 		// Create a grid.
-		LSMGrid grid = new LSMGrid(topleft, 15, 15, botright.x - topleft.x, botright.y - topleft.y, w);
+		LSMGrid grid = new LSMGrid(topleft, 10, 10, botright.x - topleft.x, botright.y - topleft.y, w);
 		
 		// Associate each point in the mesh with a grid cell.
 		for (LSMMeshParticle mp : mparticles)
