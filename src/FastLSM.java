@@ -16,8 +16,8 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	public static boolean debugFlag = false;
 	
 	// Size of screen.
-	private static final int WIDTH = 1280;
-	private static final int HEIGHT = 720;
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 720;
 	
 	// Other random constants.
 	private static final int MOUSE_Y_OFFSET = -30;
@@ -56,8 +56,8 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	{
 		// Create a placeholder mesh.
 		// TODO implement drawing a mesh.
+
 		mesh = new LSMMesh();
-		
 		
 		// Main loop, running at the desired FPS.
 		while (true)
@@ -103,7 +103,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		{
 			//mouseSelectedParticle.v.sub(mousePos, mouseSelectedParticle.pos);
 			//mouseSelectedParticle.v.scale(FPS * 0.3);
-			mouseSelectedParticle.pos.set(mousePos);
+			mouseSelectedParticle.goalpos.set(mousePos);
 		}
 	}
 
