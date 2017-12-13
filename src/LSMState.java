@@ -1,5 +1,5 @@
 
 public enum LSMState {
-	LSM_Drawing,
+	LSM_Designing,
 	LSM_Running
 }

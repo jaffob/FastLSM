@@ -26,19 +26,26 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	private final int FPS = 50;
 
 	// The grid and mesh particles.
+	public LSMState state;
 	public LSMMesh mesh;
 	public LSMGrid grid;
 	
 	// User input.
-	private Point2d mousePos;
+	public boolean mouseIsDown;
+	public Point2d mousePos;
 	private LSMGridParticle mouseSelectedParticle;
+	
+	// Designer.
+	public static final double DESIGN_PLACE_TIME = 0.1;
+	public double designPlaceTimeElapsed = 0.;
 
 	// Options.
-	public static boolean DRAW_MESH = false;
+	public static boolean DRAW_MESH = true;
 	public static boolean DRAW_GRID = true;
 	
 	public FastLSM() {
 		//grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);
+		state = LSMState.LSM_Designing;
 		mesh = null;
 		grid = null;
 		mousePos = new Point2d();
@@ -49,19 +56,27 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	{
 		// Create a placeholder mesh.
 		// TODO implement drawing a mesh.
-		mesh = LSMMesh.createRandomMesh(50, new Point2d(200., 200.), 200, 200);
-		grid = mesh.createGrid(2, 2, 1);
+		mesh = new LSMMesh();
+		
 		
 		// Main loop, running at the desired FPS.
 		while (true)
 		{
 			long startTime = System.nanoTime();
 			
-			processInput();
+			processInput(1. / FPS);
 			
-			// Timestep the grid and the mesh.
-			grid.timestep(1. / FPS);
-			mesh.timestep(1. / FPS);
+			if (state == LSMState.LSM_Designing)
+			{
+				mesh.timestep(1. / FPS);
+			}
+			else if (state == LSMState.LSM_Running)
+			{
+				// Timestep the grid and the mesh.
+				grid.timestep(1. / FPS);
+				mesh.timestep(1. / FPS);
+			}
+			
 			// Redraw the screen and sleep.
 			repaint();
 			try {
@@ -72,9 +87,19 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		}
 	}
 	
-	private void processInput()
+	private void processInput(double dt)
 	{
-		if (mouseSelectedParticle != null)
+		if (state == LSMState.LSM_Designing)
+		{
+			// Place a mesh particle every so often.
+			designPlaceTimeElapsed += dt;
+			if (mouseIsDown && designPlaceTimeElapsed >= DESIGN_PLACE_TIME)
+			{
+				System.out.println(mesh.addParticle(mousePos));
+				designPlaceTimeElapsed = 0.;
+			}
+		}
+		else if (state == LSMState.LSM_Running && mouseSelectedParticle != null)
 		{
 			//mouseSelectedParticle.v.sub(mousePos, mouseSelectedParticle.pos);
 			//mouseSelectedParticle.v.scale(FPS * 0.3);
@@ -141,23 +166,35 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		mouseSelectedParticle = grid.getNearestParticle(new Point2d(e.getX(), e.getY() + MOUSE_Y_OFFSET));
-		mouseSelectedParticle.isDragging = true;
+	public void mousePressed(MouseEvent e)
+	{
+		mouseIsDown = true;
 		mousePos.x = e.getX();
 		mousePos.y = e.getY() + MOUSE_Y_OFFSET;
+		
+		if (state == LSMState.LSM_Running && grid != null)
+		{
+			mouseSelectedParticle = grid.getNearestParticle(new Point2d(e.getX(), e.getY() + MOUSE_Y_OFFSET));
+			mouseSelectedParticle.isDragging = true;
+		}
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		mouseSelectedParticle.isDragging = false;
-		mouseSelectedParticle.v.set(0.,0.);
-		mouseSelectedParticle = null;
+	public void mouseReleased(MouseEvent e)
+	{
+		if (state == LSMState.LSM_Running && mouseSelectedParticle != null)
+		{
+			mouseSelectedParticle.isDragging = false;
+			mouseSelectedParticle.v.set(0.,0.);
+			mouseSelectedParticle = null;
+		}
+		
+		mouseIsDown = false;
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (mouseSelectedParticle != null)
+		if (mouseIsDown)
 		{
 			mousePos.x = e.getX();
 			mousePos.y = e.getY() + MOUSE_Y_OFFSET;

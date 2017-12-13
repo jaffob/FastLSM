@@ -13,7 +13,7 @@ public class LSMParticle extends LSMObject {
 	
 	public LSMParticle(Point2d pos)
 	{
-		this.pos = pos;
+		this.pos = new Point2d(pos);
 		v = new Vector2d();
 		f = new Vector2d();
 		mass = 1.;
@@ -45,5 +45,10 @@ public class LSMParticle extends LSMObject {
 		v.scaleAdd(dt / mass, f, v);		// v += f/mass * dt
 		pos.scaleAdd(dt, v, pos);			// pos += v * dt
 		f.set(0., 0.);						// clear forces
+	}
+	
+	@Override
+	public String toString() {
+		return pos.toString();
 	}
 }
