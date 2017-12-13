@@ -44,7 +44,10 @@ public class LSMGridParticle extends LSMParticle {
 	public void timestep(double dt) {
 		super.timestep(dt);
 		pos.scaleAdd(dt, v_accum, pos);
-		v_accum.set(0., 0.);
+		//v_accum.set(0., 0.);
+		v.scaleAdd(dt, v_accum, v);
+		v_accum.scale(0.7);
+		
 	}
 	
 	@Override
@@ -63,7 +66,7 @@ public class LSMGridParticle extends LSMParticle {
 		
 		if (DRAW_GOALPOS)
 		{
-			g.setColor(Color.RED);
+			g.setColor(isDragging ? Color.GREEN : Color.RED);
 			g.fillRect((int)goalpos.x - 1, (int)goalpos.y - 1, 3, 3);
 		}
 	}

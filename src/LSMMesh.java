@@ -86,7 +86,7 @@ public class LSMMesh extends LSMObject {
 		LSMMesh mesh = new LSMMesh();
 		Random rand = new Random();
 		for (int i = 0; i < nparticles; i++) {
-			mesh.addParticle(new Point2d(rand.nextInt(width) + pos.x,rand.nextInt(height) + pos.y));
+			mesh.addParticle(new Point2d(rand.nextInt(width) + pos.x, rand.nextInt(height) + pos.y));
 		}
 		return mesh;
 	}

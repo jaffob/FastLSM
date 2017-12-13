@@ -105,6 +105,8 @@ public class LSMGridRegion extends LSMObject {
 			A.add(qr);
 		}
 		
+		//System.out.println(A);
+		
 		GMatrix R = new GMatrix(2,2);
 		GMatrix S = new GMatrix(A);
 		
@@ -146,18 +148,19 @@ public class LSMGridRegion extends LSMObject {
 		GMatrix V = new GMatrix(2,2);
 		A.SVD(U, W, V);
 		V.transpose();
-		
+	
 		R.mul(U, V);
 		
-		if (R.getElement(0, 0) != R.getElement(1, 1))
-		{
-			System.out.println(R);
-		}
 		GMatrix Udet = new GMatrix(2,2);
 		Udet.setElement(1, 1, R.getElement(0, 0) * R.getElement(1, 1) - R.getElement(1, 0) * R.getElement(0, 1));
+
+		System.out.println(Math.signum(Udet.getElement(1, 1)));
+		System.out.println(W);
+		
 		R.mul(U, Udet);
 		R.mul(V);
 		
+		//System.out.println("(0,0) = " + Math.toDegrees(Math.acos(R.getElement(0,0))) + ", (1,0) = " +  + Math.toDegrees(Math.asin(R.getElement(1,0))));
 		
 		for(int i=0; i<particles.size(); i++) {
 			LSMGridParticle p = particles.get(i);
@@ -167,11 +170,11 @@ public class LSMGridRegion extends LSMObject {
 					: new Vector2d(rigidParticles.get(i));
 			goal.add(ccm);
 			
-			if (!p.isDragging)
+			//if (!p.isDragging)
 				p.goalpos.set(goal);
 			
 			// Update velocity based on goal position.
-			p.v_accum.scaleAdd(LSMGrid.STIFFNESS_ALPHA / (dt * particles.size()), Vec.diff(p.goalpos, p.pos), p.v_accum);
+			//p.v_accum.scaleAdd(LSMGrid.STIFFNESS_ALPHA / (dt * particles.size()), Vec.diff(p.goalpos, p.pos), p.v_accum);
 		}
 		
 		ccmdraw.set(ccm);
