@@ -42,7 +42,7 @@ public class LSMParticle extends LSMObject {
 
 	@Override
 	public void timestep(double dt) {
-		f.y += 100.0;
+		//f.y += 100.0;
 		v.scaleAdd(dt / mass, f, v);		// v += f/mass * dt
 		pos.scaleAdd(dt, v, pos);			// pos += v * dt
 		f.set(0., 0.);						// clear forces

@@ -36,12 +36,12 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	private LSMGridParticle mouseSelectedParticle;
 	
 	// Designer.
-	public static final double DESIGN_PLACE_TIME = 0.1;
+	public static final double DESIGN_PLACE_TIME = 0.05;
 	public double designPlaceTimeElapsed = 0.;
 
 	// Options.
 	public static boolean DRAW_MESH = true;
-	public static boolean DRAW_GRID = false;
+	public static boolean DRAW_GRID = true;
 	
 	public FastLSM() {
 		//grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);
@@ -103,7 +103,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		{
 			//mouseSelectedParticle.v.sub(mousePos, mouseSelectedParticle.pos);
 			//mouseSelectedParticle.v.scale(FPS * 0.3);
-			mouseSelectedParticle.goalpos.set(mousePos);
+			mouseSelectedParticle.pos.set(mousePos);
 		}
 	}
 
@@ -128,6 +128,11 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		{
 			g.drawString("Press [Space] to start FastLSM.", 20, 30);
 		}
+		else if (state == LSMState.LSM_Running)
+		{
+			g.drawString("[g] Draw grid (" + DRAW_GRID + ")", 20, 30);
+			g.drawString("[m] Draw mesh (" + DRAW_MESH + ")", 20, 50);
+		}
 	}
 
 	public static void main(String[] args) {
@@ -151,12 +156,12 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	public void keyPressed(KeyEvent e)
 	{
 		switch (e.getKeyCode())
-		{		
+		{
 		// Spacebar switches to running mode.
 		case 32:
 			if (state == LSMState.LSM_Designing)
 			{
-				grid = mesh.createGrid(10, 10, 2);
+				grid = mesh.createGrid(10, 10, 3);
 				state = LSMState.LSM_Running;
 			}
 			break;

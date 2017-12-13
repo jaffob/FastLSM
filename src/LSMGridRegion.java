@@ -153,13 +153,20 @@ public class LSMGridRegion extends LSMObject {
 		
 		GMatrix Udet = new GMatrix(2,2);
 		Udet.setElement(1, 1, R.getElement(0, 0) * R.getElement(1, 1) - R.getElement(1, 0) * R.getElement(0, 1));
-
-		System.out.println(Math.signum(Udet.getElement(1, 1)));
-		System.out.println(W);
 		
-		R.mul(U, Udet);
+		R.set(U);
+		
+		R.mul(Udet);
 		R.mul(V);
 		
+		double arccos = Math.acos(R.getElement(0,0));
+		
+		if (arccos > Math.PI/2.)
+		{
+			R.negate();
+		}
+		
+		System.out.println(arccos);
 		//System.out.println("(0,0) = " + Math.toDegrees(Math.acos(R.getElement(0,0))) + ", (1,0) = " +  + Math.toDegrees(Math.asin(R.getElement(1,0))));
 		
 		for(int i=0; i<particles.size(); i++) {
@@ -170,7 +177,7 @@ public class LSMGridRegion extends LSMObject {
 					: new Vector2d(rigidParticles.get(i));
 			goal.add(ccm);
 			
-			if (!p.isDragging)
+			//if (!p.isDragging)
 				p.goalpos.set(goal);
 			
 			// Update velocity based on goal position.
