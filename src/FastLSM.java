@@ -6,7 +6,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Random;
 
 import javax.swing.*;
 import javax.vecmath.Point2d;
@@ -24,7 +23,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	private static final int MOUSE_Y_OFFSET = -30;
 	
 	// Frame rate (frames per second).
-	private final int FPS = 50;
+	private final int FPS = 100;
 
 	// The grid and mesh particles.
 	public LSMMesh mesh;
@@ -40,7 +39,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	
 	public FastLSM() {
 		//grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);
-		mesh = new LSMMesh();
+		mesh = null;
 		grid = null;
 		mousePos = new Point2d();
 		mouseSelectedParticle = null;
@@ -50,11 +49,8 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	{
 		// Create a placeholder mesh.
 		// TODO implement drawing a mesh.
-		Random rand = new Random();
-		for (int i = 0; i < 50; i++) {
-			mesh.addParticle(new Point2d(rand.nextInt(200) + 200,rand.nextInt(200) + 200));
-		}
-		grid = mesh.createGrid(1);
+		mesh = LSMMesh.createRandomMesh(10, new Point2d(200., 200.), 200, 200);
+		grid = mesh.createGrid(2, 2, 1);
 		
 		// Main loop, running at the desired FPS.
 		while (true)

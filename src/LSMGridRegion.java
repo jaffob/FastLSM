@@ -146,7 +146,18 @@ public class LSMGridRegion extends LSMObject {
 		GMatrix V = new GMatrix(2,2);
 		A.SVD(U, W, V);
 		V.transpose();
+		
 		R.mul(U, V);
+		
+		if (R.getElement(0, 0) != R.getElement(1, 1))
+		{
+			System.out.println(R);
+		}
+		GMatrix Udet = new GMatrix(2,2);
+		Udet.setElement(1, 1, R.getElement(0, 0) * R.getElement(1, 1) - R.getElement(1, 0) * R.getElement(0, 1));
+		R.mul(U, Udet);
+		R.mul(V);
+		
 		
 		for(int i=0; i<particles.size(); i++) {
 			LSMGridParticle p = particles.get(i);

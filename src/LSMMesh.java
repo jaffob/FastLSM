@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.vecmath.Point2d;
 
@@ -46,7 +47,7 @@ public class LSMMesh extends LSMObject {
 	 * Creates a grid that covers the particles in this mesh.
 	 * @return
 	 */
-	public LSMGrid createGrid(int w)
+	public LSMGrid createGrid(int nx, int ny, int w)
 	{
 		// Get the outer bounds of the whole mesh.
 		Point2d topleft = new Point2d(100000., 100000.);
@@ -60,7 +61,7 @@ public class LSMMesh extends LSMObject {
 		}
 		
 		// Create a grid.
-		LSMGrid grid = new LSMGrid(topleft, 2, 2, botright.x - topleft.x, botright.y - topleft.y, w);
+		LSMGrid grid = new LSMGrid(topleft, nx, ny, botright.x - topleft.x, botright.y - topleft.y, w);
 		
 		// Associate each point in the mesh with a grid cell.
 		for (LSMMeshParticle mp : mparticles)
@@ -78,6 +79,16 @@ public class LSMMesh extends LSMObject {
 		}
 		
 		return grid;
+	}
+	
+	public static LSMMesh createRandomMesh(int nparticles, Point2d pos, int width, int height)
+	{
+		LSMMesh mesh = new LSMMesh();
+		Random rand = new Random();
+		for (int i = 0; i < nparticles; i++) {
+			mesh.addParticle(new Point2d(rand.nextInt(width) + pos.x,rand.nextInt(height) + pos.y));
+		}
+		return mesh;
 	}
 
 }
