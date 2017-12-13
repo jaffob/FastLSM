@@ -14,7 +14,7 @@ public class LSMGridRegion extends LSMObject {
 	public double rMass;
 	
 	// Constants (or not-so-constants).
-	public static boolean ENABLE_SM_ROTATION = false;//true;
+	public static boolean ENABLE_SM_ROTATION = true;
 	public static boolean DRAW_RCM = false;
 	public static boolean DRAW_CCM = false;
 	

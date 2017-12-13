@@ -19,7 +19,7 @@ public class LSMGrid extends LSMObject {
 	public final int w;
 	
 	// Constants.
-	public static final double STIFFNESS_ALPHA = 0.5;
+	public static final double STIFFNESS_ALPHA = 0.3;
 	
 	public LSMGrid(Point2d pos, int nx, int ny, double width, double height, int w)
 	{

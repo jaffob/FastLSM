@@ -41,7 +41,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 
 	// Options.
 	public static boolean DRAW_MESH = true;
-	public static boolean DRAW_GRID = true;
+	public static boolean DRAW_GRID = false;
 	
 	public FastLSM() {
 		//grid = new LSMGrid(new Point2d(100., 100.), 10, 10, 300, 300, 4);
@@ -108,15 +108,26 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g)
+	{
 		super.paintComponent(g);
+		
+		// Fill the background.
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
+		// Draw grid and mesh if need be.
 		if (grid != null && DRAW_GRID)
 			grid.draw(g);
 		if (mesh != null && DRAW_MESH)
 			mesh.draw(g);
+		
+		// Draw prompts.
+		g.setColor(Color.BLACK);
+		if (state == LSMState.LSM_Designing)
+		{
+			g.drawString("Press [Space] to start FastLSM.", 20, 30);
+		}
 	}
 
 	public static void main(String[] args) {
@@ -131,14 +142,24 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.addMouseListener(lsm);
 		window.addMouseMotionListener(lsm);
+		window.addKeyListener(lsm);
 		
 		lsm.run();
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		
+	public void keyPressed(KeyEvent e)
+	{
+		switch (e.getKeyCode())
+		{		
+		// Spacebar switches to running mode.
+		case 32:
+			if (state == LSMState.LSM_Designing)
+			{
+				grid = mesh.createGrid(10, 10, 2);
+				state = LSMState.LSM_Running;
+			}
+			break;
 		}
 	}
 
@@ -151,6 +172,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+		System.out.println("asdsa");
 	}
 
 	@Override
