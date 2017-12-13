@@ -19,6 +19,8 @@ public class LSMGridParticle extends LSMParticle {
 	public boolean isPinned;
 	public boolean isDragging;
 	
+	private static double BOUNCE = 0.4;
+	
 	// Drawing parameters.
 	public static boolean DRAW_GOALPOS = true;
 	
@@ -45,9 +47,26 @@ public class LSMGridParticle extends LSMParticle {
 		super.timestep(dt);
 		pos.scaleAdd(dt, v_accum, pos);
 		//v_accum.set(0., 0.);
+		v.scale(0.99999);
 		v.scaleAdd(dt, v_accum, v);
 		v_accum.scale(0.7);
-		
+	
+		if(pos.x < 0.0 && v.x < 0) {
+			v.x = -BOUNCE*v.x;
+			pos.x = 0.0;
+		}
+		if(pos.y < 0.0 && v.y < 0) {
+			v.y = -BOUNCE*v.y;
+			pos.y = 0.0;
+		}
+		if(pos.x > FastLSM.WIDTH  && v.x > 0) {
+			v.x = -BOUNCE*v.x;
+			pos.x = FastLSM.WIDTH;
+		}
+		if(pos.y > FastLSM.HEIGHT && v.y > 0) {
+			v.y = -BOUNCE*v.y;
+			pos.y = FastLSM.HEIGHT;
+		}
 	}
 	
 	@Override
