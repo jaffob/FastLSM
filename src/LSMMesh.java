@@ -78,6 +78,13 @@ public class LSMMesh extends LSMObject {
 						grid.particles[col+1][row+1]);
 		}
 		
+		for(LSMGridParticle[] ps : grid.particles) {
+			for(LSMGridParticle p : ps) {
+				if(p.mass == 0)
+					System.out.println("please work");
+			}
+		}
+		
 		return grid;
 	}
 	

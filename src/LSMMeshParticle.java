@@ -11,6 +11,7 @@ public class LSMMeshParticle extends LSMParticle {
 		super(pos);
 		gul = gur = gll = glr = null;
 		alpha = beta = -1.;
+		this.mass = 1.;
 	}
 
 	public LSMMeshParticle(double x, double y)
@@ -48,5 +49,13 @@ public class LSMMeshParticle extends LSMParticle {
 		
 		this.alpha = (this.pos.x - gul.pos.x) / (glr.pos.x - gul.pos.x);
 		this.beta = (this.pos.y - gul.pos.y) / (glr.pos.y - gul.pos.y);
+
+		gll.mass += alpha*beta*mass;
+		gul.mass += alpha*(1-beta)*mass;
+		glr.mass += (1-alpha)*beta*mass;
+		gur.mass += (1-alpha)*(1-beta)*mass;
+		
+		//System.out.println("gll = " + gll.mass + ", gul = " + gul.mass + ", glr = " + glr.mass + ", gur = " + gur.mass);
+
 	}
 }

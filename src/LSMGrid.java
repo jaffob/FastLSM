@@ -41,12 +41,27 @@ public class LSMGrid extends LSMObject {
 			}
 		}
 		
+//		// Initialize each particle now that they all exist.
+//		for (int i = 0; i < particles.length; i++)
+//		{
+//			for (int j = 0; j < particles[0].length; j++)
+//			{
+//				particles[i][j].initParticle();
+//				if(particles[i][j].mass == 0)
+//					System.out.println("once");
+//			}
+//		}
+	}
+	
+	public void setRegions() {
 		// Initialize each particle now that they all exist.
 		for (int i = 0; i < particles.length; i++)
 		{
 			for (int j = 0; j < particles[0].length; j++)
 			{
 				particles[i][j].initParticle();
+				if(particles[i][j].mass == 0)
+					System.out.println("once");
 			}
 		}
 	}
@@ -86,6 +101,8 @@ public class LSMGrid extends LSMObject {
 		{
 			for (int j = 0; j < particles[0].length; j++)
 			{
+				if(particles[i][j].mass <= 0)
+					continue;
 				particles[i][j].draw(g);
 				particles[i][j].r.draw(g);
 			}

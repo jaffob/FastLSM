@@ -16,7 +16,7 @@ public class LSMParticle extends LSMObject {
 		this.pos = new Point2d(pos);
 		v = new Vector2d();
 		f = new Vector2d();
-		mass = 1.;
+		mass = 0.;
 	}
 	
 	public LSMParticle(double x, double y)

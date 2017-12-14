@@ -161,7 +161,8 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		case 32:
 			if (state == LSMState.LSM_Designing)
 			{
-				grid = mesh.createGrid(10, 10, 3);
+				grid = mesh.createGrid(3, 3, 2);
+				grid.setRegions();
 				state = LSMState.LSM_Running;
 			}
 			break;

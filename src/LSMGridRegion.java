@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
+//import java.util.ArrayList;
+import java.util.*;
 
 import javax.vecmath.*;
 
@@ -14,7 +15,7 @@ public class LSMGridRegion extends LSMObject {
 	public double rMass;
 	
 	// Constants (or not-so-constants).
-	public static boolean ENABLE_SM_ROTATION = true;
+	public static boolean ENABLE_SM_ROTATION = false;//true;
 	public static boolean DRAW_RCM = false;
 	public static boolean DRAW_CCM = false;
 	
@@ -33,6 +34,66 @@ public class LSMGridRegion extends LSMObject {
 	}
 	
 	public void initRegion() {
+		
+		// Loop over all the particles that would be in this region (careful of grid edges).
+		Queue<LSMGridParticle> que = new LinkedList<LSMGridParticle>();
+		HashMap<LSMGridParticle, Integer> map = new HashMap<>();
+		que.add(grid.particles[owner.gx][owner.gy]);
+		map.put(grid.particles[owner.gx][owner.gy], 0);
+		
+		while(!que.isEmpty()){
+			LSMGridParticle cur = que.poll();
+			for (int i = cur.gx - 1; i <= cur.gx + 1; i++)
+			{
+				if (i >= 0 && i < grid.nx)
+				{
+					for (int j = cur.gy - 1; j <= cur.gy + 1; j++)
+					{
+						if (j >= 0 && j < grid.ny && grid.particles[i][j] != null)
+						{
+							LSMGridParticle p = grid.particles[i][j];
+							if(p.mass == 0) {
+								continue;
+							}
+
+							particles.add(p);
+							rcm.scaleAdd(p.mass, p.pos, rcm);
+							rMass += p.mass;
+						
+							int d = map.get(cur);
+							if(d >= grid.w)
+								continue;
+							
+							for (int k = cur.gx - 1; k <= cur.gx + 1; k++)
+							{
+								if (k >= 0 && k < grid.nx)
+								{
+									for (int l = cur.gy - 1; l <= cur.gy + 1; l++)
+									{
+										if (l >= 0 && l < grid.ny && grid.particles[k][l] != null)
+										{
+											LSMGridParticle n = grid.particles[k][l];
+											if(map.containsKey(n))
+												continue;
+											map.put(n, d+1);
+											que.add(n);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		rcm.scale(1/rMass);
+		for (LSMGridParticle p : particles)
+		{
+			rigidParticles.add(Vec.diff(p.pos, rcm));
+		}
+	}
+	
+	public void initRegionOld() {
 		
 		// Loop over all the particles that would be in this region (careful of grid edges).
 		for (int i = owner.gx - grid.w; i <= owner.gx + grid.w; i++)
@@ -166,7 +227,7 @@ public class LSMGridRegion extends LSMObject {
 			R.negate();
 		}
 		
-		System.out.println(arccos);
+		//System.out.println(arccos);
 		//System.out.println("(0,0) = " + Math.toDegrees(Math.acos(R.getElement(0,0))) + ", (1,0) = " +  + Math.toDegrees(Math.asin(R.getElement(1,0))));
 		
 		for(int i=0; i<particles.size(); i++) {
