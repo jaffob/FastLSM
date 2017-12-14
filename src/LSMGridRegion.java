@@ -20,6 +20,8 @@ public class LSMGridRegion extends LSMObject {
 	
 	public Point2d ccmdraw;
 	
+	private GMatrix lasrR;
+	
 	public LSMGridRegion(LSMGrid grid, LSMGridParticle owner)
 	{
 		this.grid = grid;
@@ -28,6 +30,8 @@ public class LSMGridRegion extends LSMObject {
 		this.rigidParticles = new ArrayList<>();
 		this.rcm = new Point2d();
 		this.rMass = 0;
+		
+		this.lasrR = new GMatrix(2,2);
 		
 		this.ccmdraw = new Point2d();
 	}
@@ -152,7 +156,7 @@ public class LSMGridRegion extends LSMObject {
 		R.mul(U, V);
 		
 		GMatrix Udet = new GMatrix(2,2);
-		Udet.setElement(1, 1, R.getElement(0, 0) * R.getElement(1, 1) - R.getElement(1, 0) * R.getElement(0, 1));
+		Udet.setElement(0, 0, R.getElement(0, 0) * R.getElement(1, 1) - R.getElement(1, 0) * R.getElement(0, 1));
 		
 		R.set(U);
 		
@@ -160,13 +164,15 @@ public class LSMGridRegion extends LSMObject {
 		R.mul(V);
 		
 		double arccos = Math.acos(R.getElement(0,0));
-		
-		if (arccos > Math.PI/2.)
+		//System.out.println(A);
+		if (arccos > Math.PI/2.)//Math.signum(R.getElement(0, 0)) != Math.signum(this.lasrR.getElement(0, 0)) &&  Math.signum(R.getElement(0, 1)) != Math.signum(this.lasrR.getElement(0, 1)))
 		{
 			R.negate();
 		}
 		
-		System.out.println(arccos);
+		this.lasrR = R;
+		
+		//System.out.println(arccos);
 		//System.out.println("(0,0) = " + Math.toDegrees(Math.acos(R.getElement(0,0))) + ", (1,0) = " +  + Math.toDegrees(Math.asin(R.getElement(1,0))));
 		
 		for(int i=0; i<particles.size(); i++) {
@@ -177,7 +183,7 @@ public class LSMGridRegion extends LSMObject {
 					: new Vector2d(rigidParticles.get(i));
 			goal.add(ccm);
 			
-			//if (!p.isDragging)
+			if (!p.isDragging)
 				p.goalpos.set(goal);
 			
 			// Update velocity based on goal position.
