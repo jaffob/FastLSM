@@ -38,7 +38,8 @@ public class LSMGridParticle extends LSMParticle {
 		this.r = new LSMGridRegion(grid, this);
 	}
 
-	public void initParticle() {
+	public void initParticle()
+	{
 		r.initRegion();
 	}
 	
