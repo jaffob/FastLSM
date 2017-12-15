@@ -15,7 +15,7 @@ public class LSMGridRegion extends LSMObject {
 	public double rMass;
 	
 	// Constants (or not-so-constants).
-	public static boolean ENABLE_SM_ROTATION = false;//true;
+	public static boolean ENABLE_SM_ROTATION = true;
 	public static boolean DRAW_RCM = false;
 	public static boolean DRAW_CCM = false;
 	
@@ -213,7 +213,7 @@ public class LSMGridRegion extends LSMObject {
 		R.mul(U, V);
 		
 		GMatrix Udet = new GMatrix(2,2);
-		Udet.setElement(1, 1, R.getElement(0, 0) * R.getElement(1, 1) - R.getElement(1, 0) * R.getElement(0, 1));
+		Udet.setElement(0, 0, R.getElement(0, 0) * R.getElement(1, 1) - R.getElement(1, 0) * R.getElement(0, 1));
 		
 		R.set(U);
 		
@@ -238,7 +238,7 @@ public class LSMGridRegion extends LSMObject {
 					: new Vector2d(rigidParticles.get(i));
 			goal.add(ccm);
 			
-			//if (!p.isDragging)
+			if (!p.isDragging)
 				p.goalpos.set(goal);
 			
 			// Update velocity based on goal position.
