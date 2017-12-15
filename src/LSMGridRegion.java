@@ -76,7 +76,8 @@ public class LSMGridRegion extends LSMObject {
 											if(map.containsKey(n))
 												continue;
 											map.put(n, d+1);
-											que.add(n);
+											if (n.mass != 0.)
+												que.add(n);
 										}
 									}
 								}

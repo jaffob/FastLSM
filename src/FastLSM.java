@@ -23,7 +23,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 	private static final int MOUSE_Y_OFFSET = -30;
 	
 	// Frame rate (frames per second).
-	private final int FPS = 50;
+	private final int FPS = 100;
 
 	// The grid and mesh particles.
 	public LSMState state;
@@ -161,7 +161,7 @@ public class FastLSM extends JComponent implements KeyListener, MouseListener, M
 		case 32:
 			if (state == LSMState.LSM_Designing)
 			{
-				grid = mesh.createGrid(10, 10, 1);
+				grid = mesh.createGrid(10, 10, 2);
 				grid.setRegions();
 				state = LSMState.LSM_Running;
 			}
